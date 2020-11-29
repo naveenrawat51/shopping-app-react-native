@@ -40,6 +40,17 @@ export default function ProductOverview({ navigation }) {
 ProductOverview.navigationOptions = ({ navigation }) => {
   return {
     headerTitle: "All Products",
+    headerLeft: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Cart"
+            iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
+            onPress={() => navigation.toggleDrawer()}
+          />
+        </HeaderButtons>
+      );
+    },
     headerRight: () => {
       return (
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
