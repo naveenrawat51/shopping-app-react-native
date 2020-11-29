@@ -11,12 +11,14 @@ import { Ionicons } from "@expo/vector-icons";
 export default function CartItem({ onRemove, sum, title, quantity }) {
   return (
     <View style={styles.cartItem}>
-      <Text style={styles.itemData}>
-        <Text style={styles.quantity}>{quantity} </Text>
-        <Text style={styles.mainText}>{title}</Text>
+      <Text style={{ ...styles.itemData, width: "70%" }}>
+        <Text style={styles.quantity}>{quantity}. </Text>
+        <Text style={styles.mainText} ellipsizeMode="tail" numberOfLines={1}>
+          {title}
+        </Text>
       </Text>
       <View style={styles.itemData}>
-        <Text style={styles.mainText}>${sum}</Text>
+        <Text style={styles.mainText}>${sum.toFixed(2)}</Text>
         <TouchableOpacity onPress={onRemove} style={styles.deleteButton}>
           <Ionicons
             name={Platform.OS === "android" ? "md-trash" : "ios-trash"}
