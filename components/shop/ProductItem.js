@@ -16,7 +16,7 @@ export default function ProductItem({
   imageUrl,
   price,
   onViewDetail,
-  onAddCart,
+  onAddToCart,
 }) {
   let TouchableComponent = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -43,7 +43,7 @@ export default function ProductItem({
             <Button
               color={Colors.primary}
               title="add to cart"
-              onPress={onAddCart}
+              onPress={onAddToCart}
             ></Button>
           </View>
         </TouchableComponent>
