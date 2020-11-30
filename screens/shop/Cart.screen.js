@@ -44,6 +44,7 @@ export default function CartScreen() {
         renderItem={(dataItem) => (
           <CartItem
             {...dataItem.item}
+            deletable={true}
             onRemove={() =>
               dispatch(CartActions.removeFromCart(dataItem.item.productId))
             }
