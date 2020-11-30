@@ -1,30 +1,46 @@
 import React from "react";
-import { FlatList, Platform } from "react-native";
+import { FlatList, Platform, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
 import * as CartActions from "../../store/actions/cart.action";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
+import Colors from "../../constants/Colors";
 
 export default function ProductOverview({ navigation }) {
   const prooducts = useSelector((state) => state.products.availableProducts);
   const dispatch = useDispatch();
 
+  const onSelectItemHandler = (id, title) =>
+    navigation.navigate({
+      routeName: "ProductDetail",
+      params: {
+        productId: id,
+        productTitle: title,
+      },
+    });
+
   const displayItem = (itemData) => {
     return (
       <ProductItem
         {...itemData.item}
-        onViewDetail={() =>
-          navigation.navigate({
-            routeName: "ProductDetail",
-            params: {
-              productId: itemData.item.id,
-              productTitle: itemData.item.title,
-            },
-          })
+        onSelect={() =>
+          onSelectItemHandler(itemData.item.id, itemData.item.title)
         }
-        onAddToCart={() => dispatch(CartActions.addToCart(itemData.item))}
-      />
+      >
+        <Button
+          color={Colors.primary}
+          title="view details"
+          onPress={() =>
+            onSelectItemHandler(itemData.item.id, itemData.item.title)
+          }
+        />
+        <Button
+          color={Colors.primary}
+          title="add to cart"
+          onPress={() => dispatch(CartActions.addToCart(itemData.item))}
+        />
+      </ProductItem>
     );
   };
 

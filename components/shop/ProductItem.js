@@ -16,6 +16,8 @@ export default function ProductItem({
   imageUrl,
   price,
   onViewDetail,
+  onSelect,
+  children,
   onAddToCart,
 }) {
   let TouchableComponent = TouchableOpacity;
@@ -26,25 +28,16 @@ export default function ProductItem({
   return (
     <View style={styles.product}>
       <View style={styles.touchable}>
-        <TouchableComponent onPress={onViewDetail} useForeground>
-          <View style={styles.imageContainer}>
-            <Image style={styles.image} source={{ uri: imageUrl }} />
-          </View>
-          <View style={styles.details}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.price}>${price.toFixed(2)}</Text>
-          </View>
-          <View style={styles.actions}>
-            <Button
-              color={Colors.primary}
-              title="view details"
-              onPress={onViewDetail}
-            ></Button>
-            <Button
-              color={Colors.primary}
-              title="add to cart"
-              onPress={onAddToCart}
-            ></Button>
+        <TouchableComponent onPress={onSelect}>
+          <View>
+            <View style={styles.imageContainer}>
+              <Image style={styles.image} source={{ uri: imageUrl }} />
+            </View>
+            <View style={styles.details}>
+              <Text style={styles.title}>{title}</Text>
+              <Text style={styles.price}>${price.toFixed(2)}</Text>
+            </View>
+            <View style={styles.actions}>{children}</View>
           </View>
         </TouchableComponent>
       </View>
