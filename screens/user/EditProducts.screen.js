@@ -44,7 +44,7 @@ export default function EditProducts({ navigation }) {
           productActions.createProduct({ title, imageUrl, description, price })
         );
 
-    navigation.navigate("UserProducts");
+    navigation.goBack();
   };
 
   useEffect(() => {
