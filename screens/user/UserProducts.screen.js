@@ -9,9 +9,18 @@ import CustomHeaderButton from "../../components/UI/HeaderButton";
 import Colors from "../../constants/Colors";
 import * as productsActions from "../../store/actions/products.action";
 
-export default function UserProducts() {
+export default function UserProducts({ navigation }) {
   const dispatch = useDispatch();
   const userProducts = useSelector((state) => state.products.userProducts);
+
+  const editProductHandler = (id) => {
+    navigation.navigate({
+      routeName: "EditProducts",
+      params: {
+        productId: id,
+      },
+    });
+  };
 
   return (
     <FlatList
@@ -20,10 +29,13 @@ export default function UserProducts() {
       renderItem={(itemData) => (
         <ProductItem
           {...itemData.item}
-          onViewDetail={() => {}}
-          onAddToCart={() => {}}
+          onSelect={() => editProductHandler(itemData.item.id)}
         >
-          <Button color={Colors.primary} title="Edit" onPress={() => {}} />
+          <Button
+            color={Colors.primary}
+            title="Edit"
+            onPress={() => editProductHandler(itemData.item.id)}
+          />
           <Button
             color={Colors.primary}
             title="Delete"
@@ -39,7 +51,7 @@ export default function UserProducts() {
 
 UserProducts.navigationOptions = ({ navigation }) => {
   return {
-    headerTitle: "All Products",
+    headerTitle: "My Products",
     headerLeft: () => {
       return (
         <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
@@ -47,6 +59,17 @@ UserProducts.navigationOptions = ({ navigation }) => {
             title="Cart"
             iconName={Platform.OS === "android" ? "md-menu" : "ios-menu"}
             onPress={() => navigation.toggleDrawer()}
+          />
+        </HeaderButtons>
+      );
+    },
+    headerRight: () => {
+      return (
+        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+          <Item
+            title="Add"
+            iconName={Platform.OS === "android" ? "md-create" : "ios-create"}
+            onPress={() => navigation.navigate("EditProducts")}
           />
         </HeaderButtons>
       );

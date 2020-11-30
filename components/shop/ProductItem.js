@@ -15,10 +15,8 @@ export default function ProductItem({
   title,
   imageUrl,
   price,
-  onViewDetail,
   onSelect,
   children,
-  onAddToCart,
 }) {
   let TouchableComponent = TouchableOpacity;
   if (Platform.OS === "android" && Platform.Version >= 21) {
@@ -35,7 +33,7 @@ export default function ProductItem({
             </View>
             <View style={styles.details}>
               <Text style={styles.title}>{title}</Text>
-              <Text style={styles.price}>${price.toFixed(2)}</Text>
+              <Text style={styles.price}>${parseFloat(price).toFixed(2)}</Text>
             </View>
             <View style={styles.actions}>{children}</View>
           </View>
@@ -79,12 +77,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    height: "25%",
+    height: "23%",
     paddingHorizontal: 15,
   },
   details: {
     alignItems: "center",
-    height: "15%",
+    height: "17%",
     padding: 10,
   },
   imageContainer: {
