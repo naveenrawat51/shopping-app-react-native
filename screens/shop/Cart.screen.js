@@ -27,7 +27,10 @@ export default function CartScreen() {
     <View style={styles.screen}>
       <View style={styles.summary}>
         <Text style={styles.summaryText} numberOfLines={1}>
-          Total: <Text style={styles.amount}>${totalAmount.toFixed(2)}</Text>
+          Total:{" "}
+          <Text style={styles.amount}>
+            ${Math.round(totalAmount.toFixed(2) * 100) / 100}
+          </Text>
         </Text>
         <Button
           color={Colors.accent}
