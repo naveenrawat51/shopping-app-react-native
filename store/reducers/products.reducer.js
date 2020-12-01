@@ -8,8 +8,8 @@ import {
 import Product from "../../modals/product.modal";
 
 const initialState = {
-  availableProducts: PRODUCTS,
-  userProducts: PRODUCTS.filter((product) => product.ownerId === "u1"),
+  availableProducts: [], //PRODUCTS,
+  userProducts: [], //PRODUCTS.filter((product) => product.ownerId === "u1"),
 };
 
 export default (state = initialState, action) => {
