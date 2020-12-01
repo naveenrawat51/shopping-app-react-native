@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import {
   View,
   Text,
@@ -6,11 +6,38 @@ import {
   ScrollView,
   TextInput,
   Platform,
+  Alert,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import { useSelector, useDispatch } from "react-redux";
 import * as productActions from "../../store/actions/products.action";
+
+const REDUCER_UPDATE = "UPDATE";
+
+const formReducer = (state, action) => {
+  if (action.type === REDUCER_UPDATE) {
+    const updatedValues = {
+      ...state.inputValues,
+      [action.input]: action.value,
+    };
+    const updatedValidities = {
+      ...state.inputValidities,
+      [action.input]: action.isValid,
+    };
+    let isFormValid = true;
+    for (const key in updatedValidities) {
+      isFormValid = isFormValid && updatedValidities[key];
+    }
+    return {
+      inputValues: updatedValues,
+      inputValidities: updatedValidities,
+      isFormValid,
+    };
+  }
+
+  return state;
+};
 
 export default function EditProducts({ navigation }) {
   const ProductId = navigation.getParam("productId");
@@ -22,26 +49,45 @@ export default function EditProducts({ navigation }) {
 
   const dispatch = useDispatch();
 
-  const [title, setTitle] = useState(EditedProduct ? EditedProduct.title : "");
-  const [imageUrl, setImageUrl] = useState(
-    EditedProduct ? EditedProduct.imageUrl : ""
-  );
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState(
-    EditedProduct ? EditedProduct.description : ""
-  );
+  const [formState, dispatchFormState] = useReducer(formReducer, {
+    inputValues: {
+      title: EditedProduct ? EditedProduct.title : "",
+      imageUrl: EditedProduct ? EditedProduct.imageUrl : "",
+      description: EditedProduct ? EditedProduct.description : "",
+      price: null,
+    },
+    inputValidities: {
+      title: EditedProduct ? true : false,
+      imageUrl: EditedProduct ? true : false,
+      description: EditedProduct ? true : false,
+      price: EditedProduct ? true : false,
+    },
+    isFormValid: EditedProduct ? true : false,
+  });
 
   const submitHandler = () => {
+    if (!formState.isFormValid) {
+      Alert.alert("Wrong Inputs!!", "Please enter item details Correctly", [
+        { text: "Okay!!" },
+      ]);
+      return;
+    }
+
     EditedProduct
       ? dispatch(
           productActions.updateProduct(ProductId, {
-            title,
-            imageUrl,
-            description,
+            title: formState.inputValues.title,
+            imageUrl: formState.inputValues.imageUrl,
+            description: formState.inputValues.description,
           })
         )
       : dispatch(
-          productActions.createProduct({ title, imageUrl, description, price })
+          productActions.createProduct({
+            title: formState.inputValues.title,
+            imageUrl: formState.inputValues.imageUrl,
+            description: formState.inputValues.description,
+            price: formState.inputValues.price,
+          })
         );
 
     navigation.goBack();
@@ -49,7 +95,23 @@ export default function EditProducts({ navigation }) {
 
   useEffect(() => {
     navigation.setParams({ submit: submitHandler });
-  }, [title, imageUrl, price, description]);
+  }, [
+    formState.inputValues.title,
+    formState.inputValues.imageUrl,
+    formState.inputValues.price,
+    formState.inputValues.description,
+    formState.isFormValid,
+  ]);
+
+  const textChangeHandler = (text, inputIdentifier) => {
+    let isValid = text.length > 0 ? true : false;
+    dispatchFormState({
+      type: REDUCER_UPDATE,
+      value: text,
+      isValid,
+      input: inputIdentifier,
+    });
+  };
 
   return (
     <ScrollView>
@@ -58,16 +120,20 @@ export default function EditProducts({ navigation }) {
           <Text style={styles.label}>Title</Text>
           <TextInput
             style={styles.input}
-            value={title}
-            onChangeText={(text) => setTitle(text)}
+            value={formState.inputValues.title}
+            onChangeText={(text) => textChangeHandler(text, "title")}
           />
         </View>
         <View style={styles.formControl}>
           <Text style={styles.label}>Image URL</Text>
           <TextInput
             style={styles.input}
-            value={imageUrl}
-            onChangeText={(text) => setImageUrl(text)}
+            value={formState.inputValues.imageUrl}
+            onChangeText={(text) => textChangeHandler(text, "imageUrl")}
+            returnKeyType="next"
+            onSubmitEditing={() =>
+              console.log("onSubmitEditing done for image url")
+            }
           />
         </View>
         {EditedProduct ? null : (
@@ -75,8 +141,9 @@ export default function EditProducts({ navigation }) {
             <Text style={styles.label}>Price</Text>
             <TextInput
               style={styles.input}
-              value={price}
-              onChangeText={(text) => setPrice(text)}
+              value={formState.inputValues.price}
+              onChangeText={(text) => textChangeHandler(text, "price")}
+              keyboardType="decimal-pad"
             />
           </View>
         )}
@@ -84,8 +151,10 @@ export default function EditProducts({ navigation }) {
           <Text style={styles.label}>Description</Text>
           <TextInput
             style={styles.input}
-            value={description}
-            onChangeText={(text) => setDescription(text)}
+            value={formState.inputValues.description}
+            onChangeText={(text) => textChangeHandler(text, "description")}
+            multiline
+            numberOfLines={3}
           />
         </View>
       </View>
