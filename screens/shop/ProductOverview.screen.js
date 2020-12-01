@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FlatList, Platform, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import ProductItem from "../../components/shop/ProductItem";
@@ -6,6 +6,7 @@ import * as CartActions from "../../store/actions/cart.action";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../../components/UI/HeaderButton";
 import Colors from "../../constants/Colors";
+import { fetchProducts } from "../../store/actions/products.action";
 
 export default function ProductOverview({ navigation }) {
   const prooducts = useSelector((state) => state.products.availableProducts);
@@ -19,6 +20,10 @@ export default function ProductOverview({ navigation }) {
         productTitle: title,
       },
     });
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const displayItem = (itemData) => {
     return (

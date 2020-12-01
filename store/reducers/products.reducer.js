@@ -3,6 +3,7 @@ import {
   DELETE_PRODUCT,
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
+  SET_PRODUCTS,
 } from "../actions/products.action";
 import Product from "../../modals/product.modal";
 
@@ -15,7 +16,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case CREATE_PRODUCT:
       const newProduct = new Product(
-        new Date().toString,
+        action.id,
         "u1",
         action.title,
         action.imageUrl,
@@ -64,6 +65,14 @@ export default (state = initialState, action) => {
         ),
         availableProducts: state.availableProducts.filter(
           (product) => product.id !== action.productId
+        ),
+      };
+
+    case SET_PRODUCTS:
+      return {
+        availableProducts: action.loadedProducts,
+        userProducts: action.loadedProducts.filter(
+          (product) => product.ownerId === "u1"
         ),
       };
   }
