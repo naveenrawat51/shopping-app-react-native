@@ -7,29 +7,33 @@ export const SET_PRODUCTS = "SET_PRODUCTS";
 
 export const fetchProducts = () => {
   return async (dispatch) => {
-    const response = await fetch(
-      "https://rn-shopping-app-96775.firebaseio.com/products.json"
-    );
-    const resData = await response.json();
-
-    let loadedProducts = [];
-    for (let key in resData) {
-      loadedProducts.push(
-        new Product(
-          key,
-          "u1",
-          resData[key].title,
-          resData[key].imageUrl,
-          resData[key].description,
-          resData[key].price
-        )
+    try {
+      const response = await fetch(
+        "https://rn-shopping-app-96775.firebaseio.com/products.json"
       );
-    }
+      const resData = await response.json();
 
-    dispatch({
-      type: SET_PRODUCTS,
-      loadedProducts,
-    });
+      let loadedProducts = [];
+      for (let key in resData) {
+        loadedProducts.push(
+          new Product(
+            key,
+            "u1",
+            resData[key].title,
+            resData[key].imageUrl,
+            resData[key].description,
+            resData[key].price
+          )
+        );
+      }
+
+      dispatch({
+        type: SET_PRODUCTS,
+        loadedProducts,
+      });
+    } catch (err) {
+      throw err;
+    }
   };
 };
 export const deleteProduct = (productId) => {
