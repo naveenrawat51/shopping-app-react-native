@@ -22,7 +22,7 @@ export const fetchProducts = () => {
             resData[key].title,
             resData[key].imageUrl,
             resData[key].description,
-            resData[key].price
+            +resData[key].price
           )
         );
       }
@@ -37,9 +37,18 @@ export const fetchProducts = () => {
   };
 };
 export const deleteProduct = (productId) => {
-  return {
-    type: DELETE_PRODUCT,
-    productId,
+  return async (dispatch) => {
+    await fetch(
+      `https://rn-shopping-app-96775.firebaseio.com/products/${productId}.json`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    dispatch({
+      type: DELETE_PRODUCT,
+      productId,
+    });
   };
 };
 
@@ -66,9 +75,22 @@ export const createProduct = (productData) => {
 };
 
 export const updateProduct = (productId, productData) => {
-  return {
-    type: UPDATE_PRODUCT,
-    productId,
-    ...productData,
+  return async (dispatch) => {
+    await fetch(
+      `https://rn-shopping-app-96775.firebaseio.com/products/${productId}.json`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(productData),
+      }
+    );
+
+    dispatch({
+      type: UPDATE_PRODUCT,
+      productId,
+      ...productData,
+    });
   };
 };
