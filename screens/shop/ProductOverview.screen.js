@@ -103,6 +103,8 @@ export default function ProductOverview({ navigation }) {
 
   return (
     <FlatList
+      onRefresh={() => dispatch(fetchProducts())}
+      refreshing={isLoading}
       data={prooducts}
       keyExtractor={(item) => item.id}
       renderItem={displayItem}
