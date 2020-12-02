@@ -1,4 +1,4 @@
-import { ADD_ORDER } from "../actions/orders.action";
+import { ADD_ORDER, SET_ORDERS } from "../actions/orders.action";
 import Order from "../../modals/orders.modal";
 
 const initialState = {
@@ -9,14 +9,19 @@ export default function ordersReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_ORDER:
       const newOrder = new Order(
-        new Date().toString(),
+        action.orderData.id,
         action.orderData.items,
         action.orderData.amount,
-        new Date()
+        action.orderData.date
       );
       return {
         ...state,
         orders: state.orders.concat(newOrder),
+      };
+
+    case SET_ORDERS:
+      return {
+        orders: action.loadedOrders,
       };
   }
   return state;

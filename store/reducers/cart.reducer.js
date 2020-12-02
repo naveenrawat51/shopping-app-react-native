@@ -24,7 +24,7 @@ export default function cartReducer(state = initialState, action) {
       return {
         ...state,
         items: { ...state.items, [id]: updatedOrNewCartItem },
-        totalAmount: state.totalAmount + price,
+        totalAmount: state.totalAmount + +price,
       };
 
     case REMOVE_FROM_CART:
@@ -36,7 +36,7 @@ export default function cartReducer(state = initialState, action) {
         const updatedCartItem = {
           ...selectedItem,
           quantity: selectedItem.quantity - 1,
-          sum: selectedItem.sum - selectedItem.price,
+          sum: +selectedItem.sum - +selectedItem.price,
         };
         updatedCartItems = {
           ...state.items,
@@ -50,7 +50,7 @@ export default function cartReducer(state = initialState, action) {
       return {
         ...state,
         items: updatedCartItems,
-        totalAmount: state.totalAmount - selectedItem.price,
+        totalAmount: state.totalAmount - +selectedItem.price,
       };
 
     case ADD_ORDER:
@@ -66,7 +66,7 @@ export default function cartReducer(state = initialState, action) {
       return {
         ...state,
         items: updatedItems,
-        totalAmount: state.totalAmount - itemTotal,
+        totalAmount: state.totalAmount - +itemTotal,
       };
   }
   return state;

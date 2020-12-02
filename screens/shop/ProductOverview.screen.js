@@ -34,6 +34,16 @@ export default function ProductOverview({ navigation }) {
     });
 
   useEffect(() => {
+    const willFocusSub = navigation.addListener("willFocus", () =>
+      dispatch(fetchProducts())
+    );
+
+    return () => {
+      willFocusSub.remove();
+    };
+  }, [fetchProducts]);
+
+  useEffect(() => {
     setIsLoading(true);
     dispatch(fetchProducts())
       .then((_) => setIsLoading(false))
