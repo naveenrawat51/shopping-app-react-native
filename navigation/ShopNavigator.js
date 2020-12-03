@@ -1,12 +1,22 @@
 import React from "react";
-
-import { Platform } from "react-native";
+import { useDispatch } from "react-redux";
+import {
+  Platform,
+  SafeAreaView,
+  Button,
+  View,
+  AsyncStorage,
+} from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
-import { createDrawerNavigator } from "react-navigation-drawer";
+import {
+  createDrawerNavigator,
+  DrawerNavigatorItems,
+} from "react-navigation-drawer";
 import { Ionicons } from "@expo/vector-icons";
 
 import Colors from "../constants/Colors";
+import { logout } from "../store/actions/auth.action";
 
 import ProductOverviewScreen from "../screens/shop/ProductOverview.screen";
 import ProductDetailScreen from "../screens/shop/ProductDetails.screen";
@@ -15,6 +25,7 @@ import OrdersScreen from "../screens/user/Orders.screen";
 import UserProducts from "../screens/user/UserProducts.screen";
 import EditProductsScreen from "../screens/user/EditProducts.screen";
 import AuthScreen from "../screens/user/Auth.screen";
+import StartupScreen from "../screens/Startup.screen";
 
 const defaultNavOption = {
   headerStyle: {
@@ -96,6 +107,26 @@ const ShoppingNavigator = createDrawerNavigator(
     contentOptions: {
       activeTintColor: Colors.primary,
     },
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+
+      return (
+        <View style={{ flex: 1 }}>
+          <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+            <DrawerNavigatorItems {...props} />
+            <Button
+              title="Logout"
+              color={Colors.primary}
+              onPress={() => {
+                dispatch(logout());
+                AsyncStorage.removeItem("userData");
+                props.navigation.navigate("Auth");
+              }}
+            />
+          </SafeAreaView>
+        </View>
+      );
+    },
   }
 );
 
@@ -109,6 +140,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+  Startup: StartupScreen,
   Auth: AuthNavigator,
   Shop: ShoppingNavigator,
 });

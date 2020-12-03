@@ -64,6 +64,11 @@ export const createProduct = (productData) => {
         body: JSON.stringify(productData),
       }
     );
+
+    if (!response.ok) {
+      const resData = await response.json();
+      throw new Error(resData.error.message);
+    }
     const resData = await response.json();
 
     dispatch({
@@ -75,17 +80,23 @@ export const createProduct = (productData) => {
 };
 
 export const updateProduct = (productId, productData) => {
-  return async (dispatch) => {
-    await fetch(
+  return async (dispatch, getState) => {
+    const token = getState().auth.token;
+    const response = await fetch(
       `https://rn-shopping-app-96775.firebaseio.com/products/${productId}.json`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          alg: "RS256",
+          kid: "tB0M2A",
+          iat: "1606968415",
         },
         body: JSON.stringify(productData),
       }
     );
+
+    const resData = await response.json();
 
     dispatch({
       type: UPDATE_PRODUCT,

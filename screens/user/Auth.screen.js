@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import Colors from "../../constants/Colors";
 import { LinearGradient } from "expo-linear-gradient";
@@ -65,7 +66,9 @@ const formReducer = (state, action) => {
   return state;
 };
 
-export default function AuthScreen() {
+export default function AuthScreen({ navigation }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(null);
   const dispatch = useDispatch();
   const [isSignUp, setIsSignUp] = useState(true);
 
@@ -83,7 +86,7 @@ export default function AuthScreen() {
     isFormValid: false,
   });
 
-  const authHandler = () => {
+  const authHandler = async () => {
     if (!formState.isFormValid) {
       Alert.alert("Wrong Inputs!!", "Please enter valid Credentials", [
         { text: "Okay!!" },
@@ -103,7 +106,15 @@ export default function AuthScreen() {
       );
     }
 
-    dispatch(action);
+    setIsError(null);
+    setIsLoading(true);
+    try {
+      await dispatch(action);
+      navigation.navigate("ProductsOvreview");
+    } catch (err) {
+      setIsError(err.message);
+      setIsLoading(false);
+    }
   };
 
   const textChangeHandler = (text, inputIdentifier) => {
@@ -123,12 +134,14 @@ export default function AuthScreen() {
     });
   };
 
+  useEffect(() => {
+    if (isError) {
+      Alert.alert("An Error Occured", isError, [{ text: "Okay" }]);
+    }
+  }, [isError]);
+
   return (
-    <KeyboardAvoidingView
-      behavior="padding"
-      keyboardVerticalOffset={50}
-      style={styles.screen}
-    >
+    <KeyboardAvoidingView style={styles.screen}>
       <LinearGradient colors={["#ffedff", "#ffe3ff"]} style={styles.gradient}>
         <View style={styles.AuthContainer}>
           <ScrollView>
@@ -158,14 +171,21 @@ export default function AuthScreen() {
               )}
             </View>
             <View style={styles.action}>
+              {isLoading ? (
+                <ActivityIndicator size="small" color={Colors.primary} />
+              ) : (
+                <Button
+                  title={isSignUp ? "Sign Up" : "Login"}
+                  color={Colors.primary}
+                  onPress={authHandler}
+                />
+              )}
+            </View>
+            <View style={styles.action}>
               <Button
-                title={isSignUp ? "Sign Up" : "Login"}
-                color={Colors.primary}
-                onPress={authHandler}
-              />
-              <Button
+                style={styles.btn}
                 title={`Switch to ${isSignUp ? "Login" : "Sign Up"}`}
-                color={Colors.primary}
+                color={Colors.accent}
                 onPress={() => setIsSignUp((prevState) => !prevState)}
               />
             </View>
@@ -193,6 +213,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: "80%",
     maxWidth: 400,
+    height: 340,
     maxHeight: 400,
     padding: 20,
     margin: 20,
@@ -217,6 +238,11 @@ const styles = StyleSheet.create({
   },
   action: {
     flexDirection: "column",
-    marginTop: 10,
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  btn: {
+    marginVertical: 20,
+    padding: 40,
   },
 });
