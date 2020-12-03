@@ -11,7 +11,7 @@ import ProductReducer from "./store/reducers/products.reducer";
 import CartReducer from "./store/reducers/cart.reducer";
 import OrdersReducer from "./store/reducers/orders.reducer";
 import AuthReducer from "./store/reducers/auth.reducer";
-import ShopNavigator from "./navigation/ShopNavigator";
+import NavigationContainer from "./navigation/NavigationContainer";
 
 const fetchFonts = (_) => {
   return Font.loadAsync({
@@ -44,7 +44,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <ShopNavigator />
+      <NavigationContainer />
     </Provider>
   );
 }

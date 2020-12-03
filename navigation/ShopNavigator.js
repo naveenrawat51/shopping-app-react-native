@@ -1,12 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-  Platform,
-  SafeAreaView,
-  Button,
-  View,
-  AsyncStorage,
-} from "react-native";
+import { Platform, SafeAreaView, Button, View } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import {
@@ -119,8 +113,6 @@ const ShoppingNavigator = createDrawerNavigator(
               color={Colors.primary}
               onPress={() => {
                 dispatch(logout());
-                AsyncStorage.removeItem("userData");
-                props.navigation.navigate("Auth");
               }}
             />
           </SafeAreaView>
