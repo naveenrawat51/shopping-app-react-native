@@ -28,8 +28,9 @@ export default function StartupScreen({ navigation }) {
         return;
       }
 
+      const expirationTime = expiryDate.getTime() - new Date().getTime();
       navigation.navigate("ProductsOvreview");
-      dispatch(authenticate(token, userId));
+      dispatch(authenticate(token, userId, expirationTime));
     };
 
     tryLogin();
