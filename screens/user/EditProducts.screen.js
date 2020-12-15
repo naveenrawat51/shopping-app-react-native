@@ -39,8 +39,8 @@ const formReducer = (state, action) => {
   return state;
 };
 
-export default function EditProducts({ navigation }) {
-  const ProductId = navigation.getParam("productId");
+export default function EditProducts({ route, navigation }) {
+  const ProductId = route.params ? route.params.productId : null;
   const EditedProduct = ProductId
     ? useSelector((state) =>
         state.products.userProducts.find((product) => product.id === ProductId)
@@ -94,7 +94,21 @@ export default function EditProducts({ navigation }) {
   };
 
   useEffect(() => {
-    navigation.setParams({ submit: submitHandler });
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            <Item
+              title="Save"
+              iconName={
+                Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
+              }
+              onPress={submitHandler}
+            />
+          </HeaderButtons>
+        );
+      },
+    });
   }, [
     formState.inputValues.title,
     formState.inputValues.imageUrl,
@@ -162,26 +176,11 @@ export default function EditProducts({ navigation }) {
   );
 }
 
-EditProducts.navigationOptions = ({ navigation }) => {
-  const submitForm = navigation.getParam("submit");
-
+export const EditProductsOptions = ({ route }) => {
+  // const submitForm = route.params ? route.params.submit  :  null;
+  const routeParams = route.params ? route.params : {};
   return {
-    headerTitle: navigation.getParam("productId")
-      ? "Edit Product"
-      : "Add Product",
-    headerRight: () => {
-      return (
-        <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-          <Item
-            title="Save"
-            iconName={
-              Platform.OS === "android" ? "md-checkmark" : "ios-checkmark"
-            }
-            onPress={submitForm}
-          />
-        </HeaderButtons>
-      );
-    },
+    headerTitle: routeParams.productId ? "Edit Product" : "Add Product",
   };
 };
 

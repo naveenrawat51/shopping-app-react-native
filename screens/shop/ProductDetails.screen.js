@@ -11,8 +11,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Colors from "../../constants/Colors";
 import * as CartActions from "../../store/actions/cart.action";
 
-export default function ProductDetail({ navigation }) {
-  const productId = navigation.getParam("productId");
+export default function ProductDetail({ route }) {
+  const productId = route.params.productId;
   const selectedProduct = useSelector((state) =>
     state.products.availableProducts.find((product) => product.id === productId)
   );
@@ -37,9 +37,9 @@ export default function ProductDetail({ navigation }) {
   );
 }
 
-ProductDetail.navigationOptions = (navData) => {
+export const ProductDetailOptions = ({ route }) => {
   return {
-    headerTitle: navData.navigation.getParam("productTitle"),
+    headerTitle: route.params ? route.params.productTitle : null,
   };
 };
 

@@ -14,12 +14,7 @@ export default function UserProducts({ navigation }) {
   const userProducts = useSelector((state) => state.products.userProducts);
 
   const editProductHandler = (id) => {
-    navigation.navigate({
-      routeName: "EditProducts",
-      params: {
-        productId: id,
-      },
-    });
+    navigation.navigate("EditProducts", { productId: id });
   };
 
   const deleteHandler = (id) => {
@@ -60,7 +55,7 @@ export default function UserProducts({ navigation }) {
   );
 }
 
-UserProducts.navigationOptions = ({ navigation }) => {
+export const UserProductsOptions = ({ navigation }) => {
   return {
     headerTitle: "My Products",
     headerLeft: () => {
