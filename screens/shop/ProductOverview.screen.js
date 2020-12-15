@@ -25,21 +25,18 @@ export default function ProductOverview({ navigation }) {
   const dispatch = useDispatch();
 
   const onSelectItemHandler = (id, title) =>
-    navigation.navigate({
-      routeName: "ProductDetail",
-      params: {
-        productId: id,
-        productTitle: title,
-      },
+    navigation.navigate("ProductDetail", {
+      productId: id,
+      productTitle: title,
     });
 
   useEffect(() => {
-    const willFocusSub = navigation.addListener("willFocus", () =>
+    const unsubscribe = navigation.addListener("focus", () =>
       dispatch(fetchProducts())
     );
 
     return () => {
-      willFocusSub.remove();
+      unsubscribe();
     };
   }, [fetchProducts]);
 
@@ -112,7 +109,7 @@ export default function ProductOverview({ navigation }) {
   );
 }
 
-ProductOverview.navigationOptions = ({ navigation }) => {
+export const productOverviewScreenOptions = ({ navigation }) => {
   return {
     headerTitle: "All Products",
     headerLeft: () => {

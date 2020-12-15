@@ -110,7 +110,7 @@ export default function AuthScreen({ navigation }) {
     setIsLoading(true);
     try {
       await dispatch(action);
-      navigation.navigate("ProductsOvreview");
+      // navigation.navigate("ProductsOvreview");
     } catch (err) {
       setIsError(err.message);
       setIsLoading(false);
@@ -196,7 +196,7 @@ export default function AuthScreen({ navigation }) {
   );
 }
 
-AuthScreen.navigationOptions = {
+export const AuthScreenOptions = {
   headerTitle: "Login",
 };
 const styles = StyleSheet.create({

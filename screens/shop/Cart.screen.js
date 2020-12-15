@@ -58,7 +58,7 @@ export default function CartScreen() {
   );
 }
 
-CartScreen.navigationOptions = {
+export const CartScreenOptions = {
   headerTitle: "Your Cart",
 };
 

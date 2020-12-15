@@ -53,7 +53,7 @@ export default function OrdersScreen({ navigation }) {
   );
 }
 
-OrdersScreen.navigationOptions = ({ navigation }) => {
+export const OrdersScreenOptions = ({ navigation }) => {
   return {
     headerTitle: "Your Orders",
     headerLeft: () => {
