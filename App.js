@@ -13,6 +13,15 @@ import OrdersReducer from "./store/reducers/orders.reducer";
 import AuthReducer from "./store/reducers/auth.reducer";
 import AppNavigator from "./navigation/AppNavigator";
 
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+  }),
+});
+
 const fetchFonts = (_) => {
   return Font.loadAsync({
     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),

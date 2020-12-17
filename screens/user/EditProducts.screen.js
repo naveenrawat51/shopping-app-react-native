@@ -40,6 +40,7 @@ const formReducer = (state, action) => {
 };
 
 export default function EditProducts({ route, navigation }) {
+  const userId = useSelector((state) => state.auth.userId);
   const ProductId = route.params ? route.params.productId : null;
   const EditedProduct = ProductId
     ? useSelector((state) =>
@@ -85,6 +86,7 @@ export default function EditProducts({ route, navigation }) {
           productActions.createProduct({
             title: formState.inputValues.title,
             imageUrl: formState.inputValues.imageUrl,
+            ownerId: userId,
             description: formState.inputValues.description,
             price: formState.inputValues.price,
           })

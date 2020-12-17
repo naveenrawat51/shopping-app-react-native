@@ -18,7 +18,7 @@ export default function OrdersScreen({ navigation }) {
   const dispatch = useDispatch();
   const [loading, isLoading] = useState(false);
   useEffect(() => {
-    const willFocusSub = navigation.addListener("willFocus", () =>
+    const willFocusSub = navigation.addListener("focus", () =>
       dispatch(fetchOrders())
     );
 
