@@ -17,7 +17,8 @@ export default (state = initialState, action) => {
     case CREATE_PRODUCT:
       const newProduct = new Product(
         action.id,
-        "u1",
+        actionn.ownerId,
+        action.ownerPushToken,
         action.title,
         action.imageUrl,
         action.description,
@@ -40,6 +41,7 @@ export default (state = initialState, action) => {
       const updatedProduct = new Product(
         action.productId,
         state.userProducts[userProductIndex].ownerId,
+        state.userProducts[userProductIndex].pushToken,
         action.title,
         action.imageUrl,
         action.description,

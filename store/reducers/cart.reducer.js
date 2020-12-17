@@ -9,7 +9,7 @@ const initialState = {
 export default function cartReducer(state = initialState, action) {
   switch (action.type) {
     case ADD_TO_CART:
-      const { id, price, title } = action.product;
+      const { id, price, title, pushToken } = action.product;
       let updatedOrNewCartItem;
 
       updatedOrNewCartItem = state.items[id]
@@ -17,9 +17,10 @@ export default function cartReducer(state = initialState, action) {
             quantity: state.items[id].quantity + 1,
             price,
             title,
+            pushToken,
             sum: state.items[id].sum + price,
           }
-        : { quantity: 1, price, title, sum: price };
+        : { quantity: 1, price, title, sum: price, pushToken };
 
       return {
         ...state,
